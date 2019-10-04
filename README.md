@@ -23,3 +23,7 @@
 - The space in the walls will be calculated by doing:
 - wallOne = Math.floor(Math.random(90)*90);
 - wallTwo = (100 - wallOne) - 10;
+
+![Wireframe 1](wireframes/IMG_5486.HEIC)
+
+![Wireframe 2](wireframes/IMG_8362.HEIC)
