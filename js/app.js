@@ -7,11 +7,10 @@ const game = {
 	score: 0,
 	level: 1,
 	player: player, // holds the player object
-	currentWalls: [], // holds wall objects after they are instantiated
-	upcomingWalls: [], // ^same^
 	rightPressed: false, // if the right arrow key is pressed
 	leftPressed: false, // if the left arrow key is pressed
-
+	leftWall: null,
+	rightWall: null,
 
 	// main game loop
 	start() {
@@ -26,7 +25,20 @@ const game = {
 
 			// draw the player 
 			this.player.draw(ctx);
-		
+
+			// if there arent any walls
+			if (this.leftWall === null || this.rightWall === null) {
+				// create the walls
+				this.createWalls();
+			}
+
+			// draw both fo the walls
+			this.leftWall.draw(ctx);
+			this.rightWall.draw(ctx);
+
+			this.leftWall.move();
+			this.rightWall.move();
+
 			// if the right key is pressed 
 			if (this.rightPressed === true) {
 				player.moveRight();
@@ -64,11 +76,12 @@ const game = {
 	// detects if the player collides with the sides
 	// of the canvas area 
 	canvasCollision() {
-		// if player touches left wall || player touches right wall
+		// if player touches the left wall
 		if (this.player.x - this.player.speedX < this.player.radius) {
 			this.player.x += 3;
 			return;
 		}
+		// player touches the right wall
 		if (this.player.x + this.player.speedX > canvas.width - this.player.radius) {
 			this.player.x -= 3;
 			return;
@@ -77,7 +90,15 @@ const game = {
 
 	// instantiates two wall objects and store them in the array
 	createWalls() {
+		// create the first wall - give it a random width
+		const leftWall = new Wall(Math.floor(Math.random(canvas.width) * canvas.width), 0);
+			
+		// create the second wall - width = (canvas.width - wallOne) - (canvas.width/10)
+		const rightWall = new Wall((canvas.width - leftWall.width) - (canvas.width / 10), canvas.width);
 
+		// add both walls to the wall properties
+		this.leftWall = leftWall;
+		this.rightWall = rightWall;
 	}
 }
 
