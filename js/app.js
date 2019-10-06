@@ -16,7 +16,7 @@ const game = {
 	start() {
 		// set the initial x and y positions of the player
 		this.player.x = canvas.width / 2;
-		this.player.y = canvas.height - 30;
+		this.player.y = canvas.height - 100;
 
 		// set the game interval - updates every 10 milliseconds
 		const interval = setInterval(() => {
@@ -36,6 +36,7 @@ const game = {
 			this.leftWall.draw(ctx);
 			this.rightWall.draw(ctx);
 
+			// move both of the walls
 			this.leftWall.move();
 			this.rightWall.move();
 
@@ -50,6 +51,15 @@ const game = {
 				
 			// collision detection for the canvas walls
 			this.canvasCollision();
+
+			// check if the walls have pass of the canvas
+			this.wallsPassed();
+
+			// if the player collides with the walls
+			if (this.wallCollision()) {
+				console.log('Game Over');
+				clearInterval(interval);
+			} 
 				
 
 		}, 10);
@@ -68,9 +78,43 @@ const game = {
 
 	},
 
-	// detects if the player collides into the walls
-	wallCollison() {
 
+   // (rect1.x < rect2.x + rect2.width &&
+   // rect1.x + rect1.width > rect2.x &&
+   // rect1.y < rect2.y + rect2.height &&
+   // rect1.y + rect1.height > rect2.y)
+
+	// detects if the player collides into the walls
+	wallCollision() {
+
+		// if player collides with the left wall
+		if (this.player.x - this.player.radius < this.leftWall.x + this.leftWall.width && 
+			this.player.x + this.player.radius > this.leftWall.x &&
+
+			this.player.y - this.player.radius < this.leftWall.y + this.leftWall.height &&
+			this.player.y + this.player.radius > this.leftWall.y) {
+			console.log('collided with left wall');
+			return true; 
+		}
+
+		// if player collides with the right wall
+		if (this.player.y - this.player.radius <= this.rightWall.y + this.rightWall.height &&
+			this.player.x + this.player.radius >= canvas.width - this.rightWall.width) {
+			console.log('collided with right wall');
+			return true;
+		}
+		return false;
+	},
+
+	// this method checks of the walls passed off the
+	// canvas
+	wallsPassed() {
+		// if the walls are off the screen
+		if (this.leftWall.y > canvas.height) {
+			// set rightWall and leftWall properties to null
+			this.leftWall = null;
+			this.rightWall = null;
+		}
 	},
 
 	// detects if the player collides with the sides
@@ -91,10 +135,10 @@ const game = {
 	// instantiates two wall objects and store them in the array
 	createWalls() {
 		// create the first wall - give it a random width
-		const leftWall = new Wall(Math.floor(Math.random(canvas.width) * canvas.width), 0);
+		const leftWall = new Wall(Math.floor(Math.random(canvas.width) * canvas.width) - (canvas.width / 8), 0);
 			
 		// create the second wall - width = (canvas.width - wallOne) - (canvas.width/10)
-		const rightWall = new Wall((canvas.width - leftWall.width) - (canvas.width / 10), canvas.width);
+		const rightWall = new Wall((canvas.width - leftWall.width) - (canvas.width / 8), canvas.width);
 
 		// add both walls to the wall properties
 		this.leftWall = leftWall;
