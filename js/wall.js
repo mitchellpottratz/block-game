@@ -15,7 +15,7 @@ class Wall {
 
 		this.y = 0;
 		this.speedY = 1;
-		this.color = 'lightgrey';	
+		this.color = this.generateRandomColor();	
 	}	
 
 	// draws 2 walls on the canvas
@@ -30,6 +30,12 @@ class Wall {
 	// moves the wall
 	move() {
 		this.y += this.speedY;	
+	}
+
+	// generate random color (green, blue, red, yellow)
+	generateRandomColor() {
+		const colors = ['blue', 'green', 'red', 'yellow'];
+		return colors[Math.floor(Math.random() * 4)];
 	}
 
 

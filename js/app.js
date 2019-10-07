@@ -52,7 +52,6 @@ const game = {
 			// collision detection for the canvas walls
 			this.canvasCollision();
 
-
 			// if the player collides with the walls
 			if (this.wallCollision()) {
 				console.log('Game Over');
@@ -95,7 +94,6 @@ const game = {
 			this.player.x + this.player.radius > this.leftWall.x &&
 			this.player.y - this.player.radius < this.leftWall.y + this.leftWall.height &&
 			this.player.y + this.player.radius > this.leftWall.y) {
-			console.log('collided with left wall');
 
 			return true; 
 		}
@@ -105,7 +103,7 @@ const game = {
 			this.player.x + this.player.radius > this.rightWall.x &&
 			this.player.y - this.player.radius < this.rightWall.y + this.rightWall.height &&
 			this.player.y + this.player.radius > this.rightWall.y) {
-			console.log('collided with right wall');
+		
 			return true;
 		}
 
