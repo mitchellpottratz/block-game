@@ -30,8 +30,7 @@ const game = {
 			// if there arent any walls
 			if (this.leftWall === null || this.rightWall === null) {
 				if (this.delayWalls === false) {
-					// create the walls
-					this.createWalls();
+					this.createWalls(); // create the walls
 				}
 			}
 
@@ -57,8 +56,9 @@ const game = {
 
 			// if the player collides with the walls
 			if (this.wallCollision()) {
-				console.log('Game Over');
+				this.stop();
 				clearInterval(interval);
+
 			}
 
 			// check if the walls have pass of the canvas
@@ -71,7 +71,7 @@ const game = {
 
 	// stops the game 
 	stop() {
-
+		$('.game-over-container').fadeIn(250);
 	},
 
 	// updates the score and the level
@@ -113,7 +113,6 @@ const game = {
 			this.player.x + this.player.radius > this.rightWall.x &&
 			this.player.y - this.player.radius < this.rightWall.y + this.rightWall.height &&
 			this.player.y + this.player.radius > this.rightWall.y) {
-		
 			return true;
 		}
 
