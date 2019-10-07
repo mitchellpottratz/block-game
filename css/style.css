@@ -82,7 +82,7 @@ canvas {
 
 #count-down {
 	width: 20%;
-	font-size: 75px;
+	font-size: 85px;
 	position: absolute;
 	top: calc(50% - 12.5px);
 	left: 40%;

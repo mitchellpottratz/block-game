@@ -161,20 +161,28 @@ $('button').on('click', (e) => {
 
 	// if the start game button was clicked
 	if (targetID === 'start-btn') {
-		$('.start-menu').fadeOut(); // hide the start meny
+		$('.start-menu').fadeOut(500); // hide the start meny
 		
 		// create a 3 second countdown timer before the game starts
 		let startTimer = 3;
 		const interval = setInterval(() => {
-
+			// update the countdown 
+			$('#count-down').text(startTimer);
+			// decrement timer 
 			startTimer--;
 			// when the timer reaches 0
 			if (startTimer === 0) {
-				clearInterval(interval);
+				// hide the countdown timer
+				$('#count-down').fadeOut(250);
+				// clear the interval
+				clearInterval(interval); 
 			}
 		}, 1000);
 
-		game.start(); // start the game
+		// start the game after 3.75 seconds
+		setTimeout(() => {
+			game.start();
+		}, 3750);
 	}
 });
 
