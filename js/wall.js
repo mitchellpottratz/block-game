@@ -12,6 +12,7 @@ class Wall {
 		} else {
 			this.x = x - this.width;	
 		}
+		
 		this.speedY = 1;
 		this.y = 0;
 		this.color = this.generateRandomColor();	

@@ -2,6 +2,7 @@
 <html>
 <head>
 	<title></title>
+	<meta name='viewport' content='width=device-width, initial-scale=1'>
 	<link rel="stylesheet" type="text/css" href="css/style.css">
 	<link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -10,22 +11,22 @@
 
 	<div class="container">
 		<div class="canvas-container">
-			<div class="score-level-container">
+			<div class="score-container">
 				<p id="score"><span>Score: </span>0</p>
-				<p id="level"><span>Level: </span>1</p>
 			</div>
-			<canvas id="canvas" height="500" width="400">
+			<canvas id="canvas" height="500" width="350">
 			</canvas>
+			<div class="mobile-buttons-container">
+				
+			</div>
 			<div class="start-menu">
 				<button id="start-btn">Start Game</button> 
 				<button id="help-btn">Help</button>	
 			</div>
 			<div id="count-down"></div>
-			<div id="level-popup"></div>
 			<div class="game-over-container">
 				<h3>Game Over!</h3>
-				<p><span>Score</span></p>
-				<p><span>Level</span></p>
+				<p><span>Score: </span></p>
 				<button id="play-again-btn">Play Again</button>
 			</div>
 		</div>

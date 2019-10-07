@@ -4,15 +4,14 @@ const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
 
 const game = {
-	score: 0,
-	level: 1,
+	score: 0, 
 	player: player, // holds the player object
 	rightPressed: false, // if the right arrow key is pressed
 	leftPressed: false, // if the left arrow key is pressed
 	upPressed: false, // if the top arrow key is pressed
 	downPressed: false, // if the bottom arrow key is pressed
-	leftWall: null,
-	rightWall: null,
+	leftWall: null, // holds a wall object
+	rightWall: null, // holds a wall object
 	delayWalls: false, // used to delay the creation of walls
 
 	// animation before the game starts
@@ -84,7 +83,6 @@ const game = {
 				player.moveDown();
 			}
 
-				
 			// collision detection for the canvas walls
 			this.canvasCollision();
 
@@ -96,7 +94,7 @@ const game = {
 			}
 
 			// update the score and level
-			this.updateScoreAndLevel();
+			this.updateScore();
 
 		}, 5);
 	},
@@ -108,24 +106,11 @@ const game = {
 	},
 
 	// updates the score and the level
-	updateScoreAndLevel() {
+	updateScore() {
 		// if the player passed the walls
 		if (this.leftWall.y === canvas.height) {
 			this.score++; // increment the score 
 			$('#score').html('<span>Score: </span>' + this.score); // update the UI
-
-			// every 10 points, increase the level by one
-			if (this.score !== 0 && this.score % 2 === 0) {
-				this.level++; // increment the level
-				$('#level').html('<span>Level: </span>' + this.level); // update the UI
-				this.delayWalls = true; // this will stop the walls from being created
-				this.levelAnimation(); // display the animation for a new level
-
-				// after 2 seconds, start creating the walls again
-				setTimeout(() => {
-					this.delayWalls = false;
-				}, 2000);
-			}
 		}	
 	}, 
 
@@ -175,31 +160,31 @@ const game = {
 			this.player.x -= 3;
 			return;
 		}
+		// if player touches the top wall
+		if (this.player.y - this.player.speedY < this.player.radius) {
+			this.player.y += 3;
+		}
+		// if player touches the bottom wall
+		if (this.player.y + this.player.speedY > canvas.height - this.player.radius) {
+			this.player.y -= 3;
+		}
 	},
 
 	// instantiates two wall objects and store them in the variables leftWall and rightWall
 	createWalls() {
 
 		// create the first wall - give it a random width
-		const leftWallWidth = Math.floor(Math.random() * (350 - 25) + 25);
+		const leftWallWidth = Math.floor(Math.random() * (canvas.width - 40));
 		const leftWall = new Wall(leftWallWidth, 0);
 			
 		// create the second wall 
-		const rightWallWidth = (canvas.width - leftWall.width) - 50;
+		const rightWallWidth = (canvas.width - leftWall.width) - 40;
 		const rightWall = new Wall(rightWallWidth, canvas.width);
 
 		// add both walls to the wall properties
 		this.leftWall = leftWall;
 		this.rightWall = rightWall;
 	}, 
-
-	// animation for when a new level is reached
-	levelAnimation() {
-		const $levelPopup = $('#level-popup');
-		$levelPopup.text('Level ' + this.level);
-		$levelPopup.fadeIn(500);
-		$levelPopup.delay(1000).fadeOut(500);
-	}
 }
 
 
