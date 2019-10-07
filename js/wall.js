@@ -12,13 +12,12 @@ class Wall {
 		} else {
 			this.x = x - this.width;	
 		}
-
-		this.y = 0;
 		this.speedY = 1;
+		this.y = 0;
 		this.color = this.generateRandomColor();	
 	}	
 
-	// draws 2 walls on the canvas
+	// draws a wall on the canvas
 	draw(ctx) {
 		ctx.beginPath();
 		ctx.rect(this.x, this.y, this.width, this.height);
@@ -30,11 +29,6 @@ class Wall {
 	// moves the wall
 	move() {
 		this.y += this.speedY;	
-	}
-
-	// delays the movement of the wall
-	delayMovement(time) {
-		
 	}
 
 	// generate random color (green, blue, red, yellow)

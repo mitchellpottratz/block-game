@@ -9,15 +9,40 @@ const game = {
 	player: player, // holds the player object
 	rightPressed: false, // if the right arrow key is pressed
 	leftPressed: false, // if the left arrow key is pressed
+	upPressed: false, // if the top arrow key is pressed
+	downPressed: false, // if the bottom arrow key is pressed
 	leftWall: null,
 	rightWall: null,
 	delayWalls: false, // used to delay the creation of walls
 
+	// animation before the game starts
+	startAnimation() {
+		// create a 3 second countdown timer before the game starts
+		let startTimer = 3;
+		const startInterval = setInterval(() => {
+			// update the countdown 
+			$('#count-down').text(startTimer);
+			// decrement timer 
+			startTimer--;
+			// when the timer reaches 0
+			if (startTimer === 0) {
+				// hide the countdown timer
+				$('#count-down').fadeOut(250);
+				// clear the interval
+				clearInterval(startInterval); 
+			}
+		}, 1000);
+	},
+
 	// main game loop
 	start() {
+
 		// set the initial x and y positions of the player
 		this.player.x = canvas.width / 2;
 		this.player.y = canvas.height - 100;
+
+		// create the initial two walls
+		this.createWalls();
 
 		// set the game interval - updates every 10 milliseconds
 		const interval = setInterval(() => {
@@ -27,8 +52,8 @@ const game = {
 			// draw the player 
 			this.player.draw(ctx);
 
-			// if there arent any walls
-			if (this.leftWall === null || this.rightWall === null) {
+			// if the walls passed of the canvas
+			if (this.wallsPassed()) {
 				if (this.delayWalls === false) {
 					this.createWalls(); // create the walls
 				}
@@ -50,6 +75,15 @@ const game = {
 			if (this.leftPressed === true) {
 				player.moveLeft();
 			}
+			// if the right key is pressed 
+			if (this.topPressed === true) {
+				player.moveUp();
+			} 
+			// if the left key is pressed
+			if (this.downPressed === true) {
+				player.moveDown();
+			}
+
 				
 			// collision detection for the canvas walls
 			this.canvasCollision();
@@ -61,17 +95,16 @@ const game = {
 
 			}
 
-			// check if the walls have pass of the canvas
-			this.wallsPassed();
-
 			// update the score and level
 			this.updateScoreAndLevel();
+
 		}, 5);
 	},
 
 	// stops the game 
 	stop() {
 		$('.game-over-container').fadeIn(250);
+		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	},
 
 	// updates the score and the level
@@ -82,7 +115,7 @@ const game = {
 			$('#score').html('<span>Score: </span>' + this.score); // update the UI
 
 			// every 10 points, increase the level by one
-			if (this.score != 0 && this.score % 2 === 0) {
+			if (this.score !== 0 && this.score % 2 === 0) {
 				this.level++; // increment the level
 				$('#level').html('<span>Level: </span>' + this.level); // update the UI
 				this.delayWalls = true; // this will stop the walls from being created
@@ -104,7 +137,6 @@ const game = {
 			this.player.x + this.player.radius > this.leftWall.x &&
 			this.player.y - this.player.radius < this.leftWall.y + this.leftWall.height &&
 			this.player.y + this.player.radius > this.leftWall.y) {
-
 			return true; 
 		}
 
@@ -124,11 +156,10 @@ const game = {
 	// canvas
 	wallsPassed() {
 		// if the walls are off the screen
-		if (this.leftWall.y > canvas.height) {
-			// set rightWall and leftWall properties to null
-			this.leftWall = null;
-			this.rightWall = null;
+		if (this.leftWall.y >= canvas.height) {
+			return true;
 		}
+		return false;
 	},
 
 	// detects if the player collides with the sides
@@ -146,13 +177,16 @@ const game = {
 		}
 	},
 
-	// instantiates two wall objects and store them in the array
+	// instantiates two wall objects and store them in the variables leftWall and rightWall
 	createWalls() {
+
 		// create the first wall - give it a random width
-		const leftWall = new Wall(Math.floor(Math.random() * canvas.width) - (canvas.width / 8), 0);
+		const leftWallWidth = Math.floor(Math.random() * (350 - 25) + 25);
+		const leftWall = new Wall(leftWallWidth, 0);
 			
-		// create the second wall - width = (canvas.width - wallOne) - (canvas.width/10)
-		const rightWall = new Wall((canvas.width - leftWall.width) - (canvas.width / 8), canvas.width);
+		// create the second wall 
+		const rightWallWidth = (canvas.width - leftWall.width) - 50;
+		const rightWall = new Wall(rightWallWidth, canvas.width);
 
 		// add both walls to the wall properties
 		this.leftWall = leftWall;
@@ -174,33 +208,22 @@ const game = {
 $('button').on('click', (e) => {
 	const targetID = $(e.target).attr('id');
 
-	// if the start game button was clicked
+	// if the start game or play again button was clicked
 	if (targetID === 'start-btn') {
-		$('.start-menu').fadeOut(500); // hide the start meny
+		$('.start-menu').fadeOut(500); // hide the start menu
+		game.startAnimation()// start the countdown animation
 		
-		// create a 3 second countdown timer before the game starts
-		let startTimer = 3;
-		const interval = setInterval(() => {
-			// update the countdown 
-			$('#count-down').text(startTimer);
-			// decrement timer 
-			startTimer--;
-			// when the timer reaches 0
-			if (startTimer === 0) {
-				// hide the countdown timer
-				$('#count-down').fadeOut(250);
-				// clear the interval
-				clearInterval(interval); 
-			}
-		}, 1000);
-
-		// start the game after 3.75 seconds
+		// start the game after 3.75 second
 		setTimeout(() => {
-			game.start();
-		}, 3750);
+			game.start(); 
+		}, 3750)
+	}
+
+	// if the play again button was clicked
+	if (targetID === 'play-again-btn') {
+		document.location.reload(); 
 	}
 });
-
 
 // listener for when keys are pressed down
 $(document).on('keydown', (e) => {
@@ -213,6 +236,14 @@ $(document).on('keydown', (e) => {
 	// if the left arrow was pressed
 	if (keycode === 37) {
 		game.leftPressed = true;
+	}
+	// if the top arrow was pressed
+	if (keycode === 38) {
+		game.topPressed = true;
+	}
+	// if the bottom arrow was pressed
+	if (keycode === 40) {
+		game.downPressed = true;
 	}
 });
 
@@ -227,6 +258,14 @@ $(document).on('keyup', (e) => {
 	// if the left arrow was pressed
 	if (keycode === 37) {
 		game.leftPressed = false;
+	}
+	// if the top arrow was pressed
+	if (keycode === 38) {
+		game.topPressed = false;
+	}
+	// if the bottom arrow was pressed
+	if (keycode === 40) {
+		game.downPressed = false;
 	}
 });
 

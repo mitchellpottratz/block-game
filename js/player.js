@@ -4,6 +4,7 @@ const player = {
 	x: 0,
 	y: 0,
 	speedX: 2,
+	speedY: 2,
 	color: '#0095DD',
 
 	// draws the player in the canvas
@@ -24,6 +25,16 @@ const player = {
 	// move the player left
 	moveLeft() {
 		this.x -= this.speedX;
+	},
+
+	// move the player up
+	moveUp() {
+		this.y -= this.speedY;
+	},
+
+	// move the player down
+	moveDown() {
+		this.y += this.speedY;
 	}
 }
 
