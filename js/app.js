@@ -62,7 +62,7 @@ const game = {
 			} 
 				
 
-		}, 10);
+		}, 5);
 	},
 
 	// stops the game 
@@ -71,38 +71,39 @@ const game = {
 	},
 
 	updateScore() {
-
+		this.score++;	
 	}, 
 
 	updateLevel() {
-
+		if (this.score % 10 === 0) {
+			this.level++;
+		}
 	},
-
-
-   // (rect1.x < rect2.x + rect2.width &&
-   // rect1.x + rect1.width > rect2.x &&
-   // rect1.y < rect2.y + rect2.height &&
-   // rect1.y + rect1.height > rect2.y)
 
 	// detects if the player collides into the walls
 	wallCollision() {
 
-		// if player collides with the left wall
+		// if player collides with the left wall -> return true
 		if (this.player.x - this.player.radius < this.leftWall.x + this.leftWall.width && 
 			this.player.x + this.player.radius > this.leftWall.x &&
-
 			this.player.y - this.player.radius < this.leftWall.y + this.leftWall.height &&
 			this.player.y + this.player.radius > this.leftWall.y) {
+			alert('Collided!');
 			console.log('collided with left wall');
 			return true; 
 		}
 
-		// if player collides with the right wall
-		if (this.player.y - this.player.radius <= this.rightWall.y + this.rightWall.height &&
-			this.player.x + this.player.radius >= canvas.width - this.rightWall.width) {
+		// if player collides with the right wall -> return true
+		if (this.player.x - this.player.radius < this.rightWall.x + this.rightWall.width &&
+			this.player.x + this.player.radius > this.rightWall.x &&
+			this.player.y - this.player.radius < this.rightWall.y + this.rightWall.height &&
+			this.player.y + this.player.radius > this.rightWall.y) {
+			alert('Collided!');
 			console.log('collided with right wall');
 			return true;
 		}
+
+		// if there is not collision -> return false
 		return false;
 	},
 
@@ -153,8 +154,9 @@ $('button').on('click', (e) => {
 	const targetID = $(e.target).attr('id');
 
 	// if the start game button was clicked
-	if (targetID === 'start-game') {
+	if (targetID === 'start-btn') {
 		game.start();
+		$('.start-menu').hide();
 		console.log('game started')
 	}
 });

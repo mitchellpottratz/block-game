@@ -14,7 +14,7 @@ class Wall {
 		}
 
 		this.y = 0;
-		this.speedY = 2;
+		this.speedY = 1;
 		this.color = 'lightgrey';	
 	}	
 

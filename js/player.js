@@ -3,7 +3,7 @@ const player = {
 	radius: 10,
 	x: 0,
 	y: 0,
-	speedX: 3,
+	speedX: 2,
 	color: '#0095DD',
 
 	// draws the player in the canvas
