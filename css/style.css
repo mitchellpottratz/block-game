@@ -80,7 +80,7 @@ canvas {
 	font-weight: bold;
 }
 
-#count-down {
+#count-down, #level-popup {
 	width: 20%;
 	font-size: 85px;
 	position: absolute;
@@ -88,6 +88,11 @@ canvas {
 	left: 40%;
 	text-align: center;
 	color: darkgrey;
+}
+
+#level-popup {
+	display: none;
+	font-size: 35px!important;
 }
 
 

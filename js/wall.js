@@ -32,6 +32,11 @@ class Wall {
 		this.y += this.speedY;	
 	}
 
+	// delays the movement of the wall
+	delayMovement(time) {
+		
+	}
+
 	// generate random color (green, blue, red, yellow)
 	generateRandomColor() {
 		const colors = ['blue', 'green', 'red', 'yellow'];

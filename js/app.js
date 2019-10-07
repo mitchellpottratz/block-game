@@ -11,6 +11,7 @@ const game = {
 	leftPressed: false, // if the left arrow key is pressed
 	leftWall: null,
 	rightWall: null,
+	delayWalls: false, // used to delay the creation of walls
 
 	// main game loop
 	start() {
@@ -28,8 +29,10 @@ const game = {
 
 			// if there arent any walls
 			if (this.leftWall === null || this.rightWall === null) {
-				// create the walls
-				this.createWalls();
+				if (this.delayWalls === false) {
+					// create the walls
+					this.createWalls();
+				}
 			}
 
 			// draw both fo the walls
@@ -79,9 +82,16 @@ const game = {
 			$('#score').html('<span>Score: </span>' + this.score); // update the UI
 
 			// every 10 points, increase the level by one
-			if (this.score != 0 && this.score % 5 === 0) {
+			if (this.score != 0 && this.score % 2 === 0) {
 				this.level++; // increment the level
 				$('#level').html('<span>Level: </span>' + this.level); // update the UI
+				this.delayWalls = true; // this will stop the walls from being created
+				this.levelAnimation(); // display the animation for a new level
+
+				// after 2 seconds, start creating the walls again
+				setTimeout(() => {
+					this.delayWalls = false;
+				}, 2000);
 			}
 		}	
 	}, 
@@ -148,6 +158,14 @@ const game = {
 		// add both walls to the wall properties
 		this.leftWall = leftWall;
 		this.rightWall = rightWall;
+	}, 
+
+	// animation for when a new level is reached
+	levelAnimation() {
+		const $levelPopup = $('#level-popup');
+		$levelPopup.text('Level ' + this.level);
+		$levelPopup.fadeIn(500);
+		$levelPopup.delay(1000).fadeOut(500);
 	}
 }
 
