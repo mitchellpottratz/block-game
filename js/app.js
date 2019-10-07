@@ -60,6 +60,10 @@ const game = {
 				console.log('Game Over');
 				clearInterval(interval);
 			} 
+			
+			// update the socre and level
+			this.updateScore();
+			this.updateLevel();
 				
 
 		}, 5);
@@ -70,11 +74,14 @@ const game = {
 
 	},
 
+	// increments the score
 	updateScore() {
 		this.score++;	
 	}, 
 
+	// changes the level
 	updateLevel() {
+		// every 10 points, increase the level by one
 		if (this.score % 10 === 0) {
 			this.level++;
 		}
