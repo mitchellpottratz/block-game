@@ -150,7 +150,7 @@ const game = {
 	// instantiates two wall objects and store them in the array
 	createWalls() {
 		// create the first wall - give it a random width
-		const leftWall = new Wall(Math.floor(Math.random(canvas.width) * canvas.width) - (canvas.width / 8), 0);
+		const leftWall = new Wall(Math.floor(Math.random() * canvas.width) - (canvas.width / 8), 0);
 			
 		// create the second wall - width = (canvas.width - wallOne) - (canvas.width/10)
 		const rightWall = new Wall((canvas.width - leftWall.width) - (canvas.width / 8), canvas.width);

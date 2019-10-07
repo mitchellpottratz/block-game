@@ -18,13 +18,11 @@ const player = {
 
 	// moves the player right
 	moveRight() {
-		console.log('Move right');
 		this.x += this.speedX;
 	},
 
 	// move the player left
 	moveLeft() {
-		console.log('Move left');
 		this.x -= this.speedX;
 	}
 }
