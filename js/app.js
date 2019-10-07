@@ -52,20 +52,18 @@ const game = {
 			// collision detection for the canvas walls
 			this.canvasCollision();
 
-			// check if the walls have pass of the canvas
-			this.wallsPassed();
 
 			// if the player collides with the walls
 			if (this.wallCollision()) {
 				console.log('Game Over');
 				clearInterval(interval);
-			} 
-			
-			// update the socre and level
-			this.updateScore();
-			this.updateLevel();
-				
+			}
 
+			// check if the walls have pass of the canvas
+			this.wallsPassed();
+
+			// update the score and level
+			this.updateScoreAndLevel();
 		}, 5);
 	},
 
@@ -74,18 +72,20 @@ const game = {
 
 	},
 
-	// increments the score
-	updateScore() {
-		this.score++;	
-	}, 
+	// updates the score and the level
+	updateScoreAndLevel() {
+		// if the player passed the walls
+		if (this.leftWall.y === canvas.height) {
+			this.score++; // increment the score 
+			$('#score').html('<span>Score: </span>' + this.score); // update the UI
 
-	// changes the level
-	updateLevel() {
-		// every 10 points, increase the level by one
-		if (this.score % 10 === 0) {
-			this.level++;
-		}
-	},
+			// every 10 points, increase the level by one
+			if (this.score != 0 && this.score % 5 === 0) {
+				this.level++; // increment the level
+				$('#level').html('<span>Level: </span>' + this.level); // update the UI
+			}
+		}	
+	}, 
 
 	// detects if the player collides into the walls
 	wallCollision() {
@@ -95,8 +95,8 @@ const game = {
 			this.player.x + this.player.radius > this.leftWall.x &&
 			this.player.y - this.player.radius < this.leftWall.y + this.leftWall.height &&
 			this.player.y + this.player.radius > this.leftWall.y) {
-			alert('Collided!');
 			console.log('collided with left wall');
+
 			return true; 
 		}
 
@@ -105,7 +105,6 @@ const game = {
 			this.player.x + this.player.radius > this.rightWall.x &&
 			this.player.y - this.player.radius < this.rightWall.y + this.rightWall.height &&
 			this.player.y + this.player.radius > this.rightWall.y) {
-			alert('Collided!');
 			console.log('collided with right wall');
 			return true;
 		}
@@ -162,9 +161,20 @@ $('button').on('click', (e) => {
 
 	// if the start game button was clicked
 	if (targetID === 'start-btn') {
-		game.start();
-		$('.start-menu').hide();
-		console.log('game started')
+		$('.start-menu').fadeOut(); // hide the start meny
+		
+		// create a 3 second countdown timer before the game starts
+		let startTimer = 3;
+		const interval = setInterval(() => {
+
+			startTimer--;
+			// when the timer reaches 0
+			if (startTimer === 0) {
+				clearInterval(interval);
+			}
+		}, 1000);
+
+		game.start(); // start the game
 	}
 });
 
@@ -176,8 +186,6 @@ $(document).on('keydown', (e) => {
 	// if the right arrow was pressed
 	if (keycode === 39) {
 		game.rightPressed = true;
-		console.log('right arrow pressed');
-		console.log(player.x);
 	} 
 	// if the left arrow was pressed
 	if (keycode === 37) {
@@ -192,7 +200,6 @@ $(document).on('keyup', (e) => {
 	// if the right arrow was pressed
 	if (keycode === 39) {
 		game.rightPressed = false;
-		console.log('right arrow released');
 	} 
 	// if the left arrow was pressed
 	if (keycode === 37) {
