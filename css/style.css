@@ -48,7 +48,7 @@ canvas {
 }
 
 .start-menu > button:focus, 
-.game-over-container > button:focus  {
+.game-over-container > button:focus {
 	outline: none;
 }
 
@@ -111,21 +111,6 @@ canvas {
 	left: calc(50% - 57.5px);
 }
 
-.mobile-buttons-container {
-	width: 350px;
-	border: 2px solid black;
-	display: none;
-}
-
-.mobile-buttons-container > div > button {
-	width: 50px;
-	height: 50px;
-	border: 1px solid black;
-	background-color: black;
-	color: white;
-	font-size: 1.25rem;
-}
-
 @media only screen and (max-width: 985px) {
 	.container {
 		width: 75%;
@@ -148,11 +133,6 @@ canvas {
 		width: 100%;
 		margin-right: 0;
 		margin-left: 0;
-	}
-	.mobile-buttons-container {
-		display: flex;
-		justify-content: space-between;
-		align-items: flex-start;
 	}
 }
 

@@ -102,6 +102,7 @@ const game = {
 	// stops the game 
 	stop() {
 		$('.game-over-container').fadeIn(250);
+		$('#final-score').html('<span>Score: </span>' + this.score);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	},
 
@@ -253,6 +254,7 @@ $(document).on('keyup', (e) => {
 		game.downPressed = false;
 	}
 });
+
 
 
 
