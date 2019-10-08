@@ -1,10 +1,11 @@
+
 class Block {
 
-	constructor(x) {
+	constructor(x, y) {
 		this.width = 15;
 		this.height = 15;
 		this.x = x;
-		this.y = 0;
+		this.y = y;
 		this.color = '#FFD700'; // gold
 		this.speedY = 0.5;
 		this.collected = false;

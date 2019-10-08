@@ -217,11 +217,11 @@ const game = {
 	createWalls() {
 
 		// create the first wall - give it a random width
-		const leftWallWidth = Math.floor(Math.random() * (canvas.width - 40));
+		const leftWallWidth = Math.floor(Math.random() * (canvas.width - 45));
 		const leftWall = new Wall(leftWallWidth, 0);
 			
 		// create the second wall 
-		const rightWallWidth = (canvas.width - leftWall.width) - 40;
+		const rightWallWidth = (canvas.width - leftWall.width) - 45;
 		const rightWall = new Wall(rightWallWidth, canvas.width);
 
 		// add both walls to the wall properties
@@ -231,9 +231,11 @@ const game = {
 
 	// instantiates a new block object every second
 	createBlock() {
+		// get random x and y position for the block
+		const randomX = Math.floor(Math.random() * ((canvas.width-15) - 15) + 15);
+		const randomY = Math.floor(Math.random() * -10); // between 0 and -10
 		// create block
-		const block = new Block(Math.floor(Math.random() * ((canvas.width-15) - 15) + 15));
-		// append to the blocks array
+		const block = new Block(randomX, randomY);
 		return block;
 	},
 
