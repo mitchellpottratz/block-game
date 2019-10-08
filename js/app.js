@@ -5,6 +5,7 @@ const ctx = canvas.getContext('2d');
 
 const game = {
 	score: 0, 
+	timer: 0, // game timer
 	player: player, // holds the player object
 	rightPressed: false, // if the right arrow key is pressed
 	leftPressed: false, // if the left arrow key is pressed
@@ -13,6 +14,8 @@ const game = {
 	leftWall: null, // holds a wall object
 	rightWall: null, // holds a wall object
 	delayWalls: false, // used to delay the creation of walls
+	blocks: [], // array to hold block object
+	blocksCollected: 0, // number of blocks the player collected
 
 	// animation before the game starts
 	startAnimation() {
@@ -35,6 +38,8 @@ const game = {
 
 	// main game loop
 	start() {
+		// start the game timer
+		this.startGameTimer();
 
 		// set the initial x and y positions of the player
 		this.player.x = canvas.width / 2;
@@ -66,6 +71,35 @@ const game = {
 			this.leftWall.move();
 			this.rightWall.move();
 
+			// create a block if the block array has less than 2 blocks
+			if (this.blocks.length < 2) {
+				const block = this.createBlock();
+				this.blocks.push(block);
+			}
+
+			// draw and move the blocks
+			for (let i=0; i < this.blocks.length; i++) {
+				const block = this.blocks[i];
+				block.draw(ctx);
+				block.move();
+				// if the player collected the block
+				if (this.blockCollision(block)) {
+					block.isCollected();
+				} 
+				// if the block passes off the canvas
+				if (block.y > canvas.height) {
+					block.hasPassed();
+				}
+
+				// if the block is collected or has passed
+				// remove it from the blocks array
+				if (block.collected || block.passed) {
+					this.blocks.splice(i, 1);
+					this.blocksCollected++;
+					console.log('blocks collected: ' + this.blocksCollected);
+				}
+			}
+
 			// if the right key is pressed 
 			if (this.rightPressed === true) {
 				player.moveRight();
@@ -90,7 +124,6 @@ const game = {
 			if (this.wallCollision()) {
 				this.stop();
 				clearInterval(interval);
-
 			}
 
 			// update the score and level
@@ -104,6 +137,14 @@ const game = {
 		$('.game-over-container').fadeIn(250);
 		$('#final-score').html('<span>Score: </span>' + this.score);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
+	},
+
+	// increments the timer property by one every second
+	startGameTimer() {
+		const interval = setInterval(() => {
+			this.timer++;
+			console.log(this.timer);
+		}, 1000);
 	},
 
 	// updates the score and the level
@@ -186,6 +227,26 @@ const game = {
 		this.leftWall = leftWall;
 		this.rightWall = rightWall;
 	}, 
+
+	// instantiates a new block object every second
+	createBlock() {
+		// create block
+		const block = new Block(Math.floor(Math.random() * ((canvas.width-15) - 15) + 15));
+		// append to the blocks array
+		return block;
+	},
+
+	blockCollision(block) {
+		// if player collides with the left wall -> return true
+		if (this.player.x - this.player.radius < block.x + block.width && 
+			this.player.x + this.player.radius > block.x &&
+			this.player.y - this.player.radius < block.y + block.height &&
+			this.player.y + this.player.radius > block.y) {
+			return true;
+		}
+		return false;
+	}
+	
 }
 
 
@@ -205,10 +266,23 @@ $('button').on('click', (e) => {
 		}, 3750)
 	}
 
+	// if the help button was clicked
+	if (targetID === 'help-btn') {
+		$('.start-menu').slideUp(500);
+		$('.help-container').delay(500).slideDown(500);
+	}
+
+	// if the back link on the help section is clicked
+	if (targetID === 'back-link') {
+		$('.help-container').slideUp(500);
+		$('.start-menu').delay(500).slideDown(500);	
+	}
+
 	// if the play again button was clicked
 	if (targetID === 'play-again-btn') {
 		document.location.reload(); 
 	}
+
 });
 
 // listener for when keys are pressed down
@@ -254,6 +328,7 @@ $(document).on('keyup', (e) => {
 		game.downPressed = false;
 	}
 });
+
 
 
 

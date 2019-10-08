@@ -82,6 +82,39 @@ canvas {
 	font-weight: bold;
 }
 
+.help-container {
+	width: 300px;
+	height: 200px;
+	padding-left: 25px;
+	padding-right: 25px;
+	padding-top: 15px;
+	position: absolute;
+	top: 50px;
+	display: none;
+}
+
+.help-container > #back-link {
+	color: blue;
+	text-decoration: none;
+	width: auto;
+	height: 15px;
+	background-color: transparent;
+	border: none;
+	font-size: 1rem;
+}
+
+.help-container > #back-link:hover {
+	opacity: 0.7;
+}
+
+.help-container > #back-link:focus {
+	outline: none;
+}
+
+.help-container > #back-link > span {
+	margin-right: 5px;
+}
+
 #count-down {
 	width: 20%;
 	font-size: 85px;
