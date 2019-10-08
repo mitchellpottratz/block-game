@@ -48,7 +48,7 @@ const game = {
 		// create the initial two walls
 		this.createWalls();
 
-		// set the game interval - updates every 10 milliseconds
+		// set the game interval - updates every 5 milliseconds
 		const interval = setInterval(() => {
 			// clear the canvas every interval
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -96,7 +96,6 @@ const game = {
 				if (block.collected || block.passed) {
 					this.blocks.splice(i, 1);
 					this.blocksCollected++;
-					console.log('blocks collected: ' + this.blocksCollected);
 				}
 			}
 
@@ -127,7 +126,7 @@ const game = {
 			}
 
 			// update the score and level
-			this.updateScore();
+			this.updateScoreAndBlocksCollected();
 
 		}, 5);
 	},
@@ -148,12 +147,14 @@ const game = {
 	},
 
 	// updates the score and the level
-	updateScore() {
+	updateScoreAndBlocksCollected() {
 		// if the player passed the walls
 		if (this.leftWall.y === canvas.height) {
 			this.score++; // increment the score 
-			$('#score').html('<span>Score: </span>' + this.score); // update the UI
+			$('#score').html('<span>Score: </span>' + this.score); // update UI
 		}	
+		// update blocks collected UI
+		$('#blocks-collected').html('<span>Blocks Collected: </span>' + this.blocksCollected);
 	}, 
 
 	// detects if the player collides into the walls
