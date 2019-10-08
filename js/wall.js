@@ -15,7 +15,8 @@ class Wall {
 		
 		this.speedY = 1;
 		this.y = 0;
-		this.color = this.generateRandomColor();	
+		this.color = this.generateRandomColor();
+		this.hasPassed = false;	
 	}	
 
 	// draws a wall on the canvas

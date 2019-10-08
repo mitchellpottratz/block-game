@@ -63,6 +63,23 @@ canvas {
 	left: calc(50% - 57.5px);
 }
 
+.power-up-notifier {
+	width: 300px;
+	height: 50px;
+	padding-left: 25px;
+	padding-right: 25px;
+	position: absolute;
+	top: 0;
+	background-color: green;
+	z-index: 1;
+	display: none;
+}
+
+.power-up-notifier > p {
+	color: white;
+	font-size: 1rem;
+}
+
 .score-container {
 	width: 300px;
 	height: 50px;
@@ -71,13 +88,12 @@ canvas {
 	border: 1px solid lightgrey;
 	position: absolute;
 	top: 0;
-	text-align: right;
 	display: flex;
 	justify-content: space-between;
 }
 
 .score-container > p {
-	font-size: 1.1rem;
+	font-size: 1rem;
 }
 
 .score-container > p > span {

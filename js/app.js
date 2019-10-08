@@ -57,9 +57,17 @@ const game = {
 			this.player.draw(ctx);
 
 			// if the walls passed of the canvas
-			if (this.wallsPassed()) {
-				if (this.delayWalls === false) {
-					this.createWalls(); // create the walls
+			if (this.leftWall.y >= canvas.height) {
+
+				// set the hasPassed property on both walls to true
+				this.leftWall.hasPassed = true;
+				this.rightWall.hasPassed = true;
+
+				// update the score and blocks collected
+				this.updateScoreAndBlocksCollected();
+
+				if (this.delayWalls === false) { 
+					this.createWalls(); // create new walls
 				}
 			}
 
@@ -99,6 +107,10 @@ const game = {
 				}
 			}
 
+			// for every 10 blocks collected, the player is invinsible
+			// for 5 seconds
+			this.player.giveInvinsibility(this.blocksCollected);
+
 			// if the right key is pressed 
 			if (this.rightPressed === true) {
 				player.moveRight();
@@ -125,9 +137,6 @@ const game = {
 				clearInterval(interval);
 			}
 
-			// update the score and level
-			this.updateScoreAndBlocksCollected();
-
 		}, 5);
 	},
 
@@ -149,7 +158,7 @@ const game = {
 	// updates the score and the level
 	updateScoreAndBlocksCollected() {
 		// if the player passed the walls
-		if (this.leftWall.y === canvas.height) {
+		if (this.leftWall.hasPassed === true) {
 			this.score++; // increment the score 
 			$('#score').html('<span>Score: </span>' + this.score); // update UI
 		}	
@@ -160,22 +169,25 @@ const game = {
 	// detects if the player collides into the walls
 	wallCollision() {
 
-		// if player collides with the left wall -> return true
-		if (this.player.x - this.player.radius < this.leftWall.x + this.leftWall.width && 
-			this.player.x + this.player.radius > this.leftWall.x &&
-			this.player.y - this.player.radius < this.leftWall.y + this.leftWall.height &&
-			this.player.y + this.player.radius > this.leftWall.y) {
-			return true; 
-		}
+		// if the player does not currently have the invinsibility power
+		if (!this.player.isInvinsible) {	
+			console.log('Invisible: ' + this.player.isInvinsible);
+			// if player collides with the left wall -> return true
+			if (this.player.x - this.player.radius < this.leftWall.x + this.leftWall.width && 
+				this.player.x + this.player.radius > this.leftWall.x &&
+				this.player.y - this.player.radius < this.leftWall.y + this.leftWall.height &&
+				this.player.y + this.player.radius > this.leftWall.y) {
+				return true; 
+			}
 
-		// if player collides with the right wall -> return true
-		if (this.player.x - this.player.radius < this.rightWall.x + this.rightWall.width &&
-			this.player.x + this.player.radius > this.rightWall.x &&
-			this.player.y - this.player.radius < this.rightWall.y + this.rightWall.height &&
-			this.player.y + this.player.radius > this.rightWall.y) {
-			return true;
+			// if player collides with the right wall -> return true
+			if (this.player.x - this.player.radius < this.rightWall.x + this.rightWall.width &&
+				this.player.x + this.player.radius > this.rightWall.x &&
+				this.player.y - this.player.radius < this.rightWall.y + this.rightWall.height &&
+				this.player.y + this.player.radius > this.rightWall.y) {
+				return true;
+			}
 		}
-
 		// if there is not collision -> return false
 		return false;
 	},
@@ -184,10 +196,9 @@ const game = {
 	// canvas
 	wallsPassed() {
 		// if the walls are off the screen
-		if (this.leftWall.y >= canvas.height) {
-			return true;
+		if (this.leftWall.y > canvas.height) {
+			this.leftWall.hasPassed = true;
 		}
-		return false;
 	},
 
 	// detects if the player collides with the sides
@@ -217,11 +228,11 @@ const game = {
 	createWalls() {
 
 		// create the first wall - give it a random width
-		const leftWallWidth = Math.floor(Math.random() * (canvas.width - 45));
+		const leftWallWidth = Math.floor(Math.random() * (canvas.width - 60));
 		const leftWall = new Wall(leftWallWidth, 0);
 			
 		// create the second wall 
-		const rightWallWidth = (canvas.width - leftWall.width) - 45;
+		const rightWallWidth = (canvas.width - leftWall.width) - 60;
 		const rightWall = new Wall(rightWallWidth, canvas.width);
 
 		// add both walls to the wall properties
@@ -248,7 +259,8 @@ const game = {
 			return true;
 		}
 		return false;
-	}
+	}, 
+	
 	
 }
 
