@@ -292,6 +292,14 @@ const game = {
 		// clear the firstTouch property on the player object
 		this.player.firstTouch.x = null;
 		this.player.firstTouch.y = null;
+	},
+
+	postToLeaderBoard(name) {
+
+	},
+
+	getLeaderBoard() {
+
 	}
 }
 
@@ -373,6 +381,26 @@ $(document).on('keyup', (e) => {
 	if (keycode === 40) {
 		game.downPressed = false;
 	}
+});
+
+// when the leaderboard form is submitted
+$('#leaderboard-form').on('submit', (e) => {
+	e.preventDefault();
+
+	// get the name
+	const $name = $('#name-input').val();
+
+	// if the length of name is greater than 0
+	if ($name.length > 0) {
+
+		// if the name doesnt already exist
+		
+
+	// otherwise, show error message
+	} else {
+
+	}
+ 
 });
 
 
