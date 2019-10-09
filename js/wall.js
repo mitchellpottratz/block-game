@@ -13,7 +13,7 @@ class Wall {
 			this.x = x - this.width;	
 		}
 		
-		this.speedY = 0.1;
+		this.speedY = 1.25;
 		this.y = 0;
 		this.color = this.generateRandomColor();
 		this.hasPassed = false;	
