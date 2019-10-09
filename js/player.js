@@ -7,6 +7,7 @@ const player = {
 	speedY: 2,
 	color: '#0095DD',
 	isInvinsible: false,
+	firstTouch: {x: null, y: null},
 
 	// draws the player in the canvas
 	draw(ctx) {
@@ -36,6 +37,14 @@ const player = {
 	// move the player down
 	moveDown() {
 		this.y += this.speedY;
+	},
+
+	// move the player based on the position of the touches on the screen
+	touchMove(touch) {
+		// set the position of the player to the positon of the touch
+		this.x = touch.x;
+		this.y = touch.y + 10;
+
 	},
 
 	// give the player the invinsibility for 5 seconds power up every 10 blocks

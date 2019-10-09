@@ -1,4 +1,4 @@
- 
+
 class Wall {
 	
 	constructor(width, x) {
@@ -13,7 +13,7 @@ class Wall {
 			this.x = x - this.width;	
 		}
 		
-		this.speedY = 1;
+		this.speedY = 0.1;
 		this.y = 0;
 		this.color = this.generateRandomColor();
 		this.hasPassed = false;	

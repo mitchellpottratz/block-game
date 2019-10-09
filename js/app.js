@@ -269,9 +269,29 @@ const game = {
 	    	x: touchEvent.touches[0].clientX - rect.left,
 	    	y: touchEvent.touches[0].clientY - rect.top
 	  	};
+	},
+
+	// logic for touchstart listener
+	handleTouchStart(touch) {
+		// set the x and y position to the firstTouch property
+		// on the player object
+		this.player.firstTouch.x = touch.x;
+		this.player.firstTouch.y = touch.y;
+	},
+
+	// logic for the touchmove listener
+	handleTouchMove(touch) {
+		// move the player by passing the touches to the touchMove
+		// method on the player
+		this.player.touchMove(touch);
+	}, 
+
+	// logic for touchend listener
+	handleTouchEnd() {
+		// clear the firstTouch property on the player object
+		this.player.firstTouch.x = null;
+		this.player.firstTouch.y = null;
 	}
-	
-	
 }
 
 
@@ -355,20 +375,13 @@ $(document).on('keyup', (e) => {
 });
 
 
-function getTouchPos(canvasDom, touchEvent) {
-	const rect = canvasDom.getBoundingClientRect();
-  	return {
-    	x: touchEvent.touches[0].clientX - rect.left,
-    	y: touchEvent.touches[0].clientY - rect.top
-  	};
-}
-
-
 // listens for the finger to first makes contact with the canvas
 $(canvas).on('touchstart', (e) => {
 	e.preventDefault();
 	// gets x, y position of the first touch
-	const touchPos = getTouchPos(canvas, e);
+	const touchPos = game.getTouchPos(canvas, e);
+	// pass the touch to the handler method 
+	game.handleTouchStart(touchPos);
 });
 
 
@@ -376,7 +389,16 @@ $(canvas).on('touchstart', (e) => {
 $(canvas).on('touchmove', (e) => {
 	e.preventDefault();
 	// gets x, y position of the touches
-	var touchPos = getTouchPos(canvas, e);
+	const touchPos = game.getTouchPos(canvas, e);
+	// pass touch to the handler method
+	game.handleTouchMove(touchPos);
+});
+
+// listens for the finger to re
+$(canvas).on('touchend', (e) => {
+	e.preventDefault();
+	// call the touchend handler
+	game.handleTouchEnd();
 });
 
 
