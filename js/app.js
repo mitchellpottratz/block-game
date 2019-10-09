@@ -144,6 +144,7 @@ const game = {
 	stop() {
 		$('.game-over-container').fadeIn(250);
 		$('#final-score').html('<span>Score: </span>' + this.score);
+		$('#final-blocks').html('<span>Blocks Collected</span>' + this.blocksCollected);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
 	},
 

@@ -43,7 +43,7 @@ const player = {
 	touchMove(touch) {
 		// set the position of the player to the positon of the touch
 		this.x = touch.x;
-		this.y = touch.y - 50;
+		this.y = touch.y - 85;
 
 	},
 
