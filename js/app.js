@@ -260,6 +260,16 @@ const game = {
 		}
 		return false;
 	}, 
+
+	// takes a touch event and returns on object with the
+	// x and y coordinates of the position of the touch on the canvas
+	getTouchPos(canvasDom, touchEvent) {
+		const rect = canvasDom.getBoundingClientRect();
+	  	return {
+	    	x: touchEvent.touches[0].clientX - rect.left,
+	    	y: touchEvent.touches[0].clientY - rect.top
+	  	};
+	}
 	
 	
 }
@@ -343,6 +353,32 @@ $(document).on('keyup', (e) => {
 		game.downPressed = false;
 	}
 });
+
+
+function getTouchPos(canvasDom, touchEvent) {
+	const rect = canvasDom.getBoundingClientRect();
+  	return {
+    	x: touchEvent.touches[0].clientX - rect.left,
+    	y: touchEvent.touches[0].clientY - rect.top
+  	};
+}
+
+
+// listens for the finger to first makes contact with the canvas
+$(canvas).on('touchstart', (e) => {
+	e.preventDefault();
+	// gets x, y position of the first touch
+	const touchPos = getTouchPos(canvas, e);
+});
+
+
+// listens for the finger to move along the canvas
+$(canvas).on('touchmove', (e) => {
+	e.preventDefault();
+	// gets x, y position of the touches
+	var touchPos = getTouchPos(canvas, e);
+});
+
 
 
 
