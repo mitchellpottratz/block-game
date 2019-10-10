@@ -46,17 +46,13 @@ const game = {
 		// start the game timer
 		this.startGameTimer();
 
-		// set the initial x and y positions of the player
-		this.player.x = canvas.width / 2;
-		this.player.y = canvas.height - 100;
-
 		// create the initial two walls
 		this.createWalls();
 
 		// set the game interval - updates every 5 milliseconds
 		const interval = setInterval(() => {
 
-			// clear the canvas every interval
+ 			// clear the canvas every interval
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			// draw the player 
@@ -64,6 +60,11 @@ const game = {
 
 			// checks if walls passed off the canvas
 			this.wallsPassed();
+
+			// if the walls have passed, create new ones
+			if (this.walls.leftWall.hasPassed) {
+				this.createWalls();
+			}
 
 			// draw both fo the walls
 			this.walls.leftWall.draw(ctx);
@@ -115,10 +116,10 @@ const game = {
 
 			// if the player collides with the walls
 			if (this.wallCollision()) {
-				this.stop();
+				game.stop();
 				clearInterval(interval);
 			}
-
+			
 		}, 5);
 	},
 
@@ -143,7 +144,7 @@ const game = {
 		// if the player passed the walls then increment the score and update UI
 		if (this.walls.leftWall.hasPassed === true) {
 			this.score++;
-			$('#score').html('<span>Score: </span>' + this.score); // update UI
+			$('#score').html('<span>Score: </span>' + this.score); 
 		}	
 	}, 
 
@@ -160,7 +161,7 @@ const game = {
 				this.player.x + this.player.radius > leftWall.x &&
 				this.player.y - this.player.radius < leftWall.y + leftWall.height &&
 				this.player.y + this.player.radius > leftWall.y) {
-				return true; 
+				return true;
 			}
 
 			// if player collides with the right wall -> return true
@@ -178,8 +179,9 @@ const game = {
 	// this method checks of the walls passed off the canvas
 	wallsPassed() {
 		// if the walls are off the screen
-		if (this.walls.leftWall.y > canvas.height) {
+		if (this.walls.leftWall.y >= canvas.height) {
 			this.walls.leftWall.hasPassed = true;
+			this.updateScore();
 		}
 	},
 
@@ -226,7 +228,6 @@ const game = {
 	createBlocks() {
 		// while there are less than 2 blocks on the canvas
 		while (this.blocks.length < 2) {
-			console.log('blocks count: ' + this.blocks.length);
 			// get random x and y position for the block
 			const randomX = Math.floor(Math.random() * ((canvas.width-15) - 15) + 15);
 			const randomY = Math.floor(Math.random() * -10); // between 0 and -10

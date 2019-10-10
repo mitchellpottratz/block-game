@@ -1,8 +1,8 @@
 
 const player = {
 	radius: 10,
-	x: 0,
-	y: 0,
+	x: canvas.width / 2,
+	y: canvas.height - 100,
 	speedX: 2,
 	speedY: 2,
 	color: '#0095DD',
