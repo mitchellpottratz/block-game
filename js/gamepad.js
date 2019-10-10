@@ -59,6 +59,12 @@ function gameLoop() {
 	else if (buttonPressed(gamepad.buttons[14])) {
 		game.player.x -= 1.5;
 	}
+
+	if (gamepad.axes[0] < -0.25) game.player.x -= 1.5;
+  	if (gamepad.axes[0] > 0.25) game.player.x += 1.5;
+
+  	if (gamepad.axes[1] < -0.25) game.player.y -= 1.5;
+  	if (gamepad.axes[1] > 0.25) game.player.y += 1.5;
   }
 
 

@@ -6,7 +6,7 @@ const player = {
 	speedX: 2,
 	speedY: 2,
 	color: '#0095DD',
-	isInvinsible: false,
+	isInvinsible: true,
 	firstTouch: {x: null, y: null},
 
 	// draws the player in the canvas
