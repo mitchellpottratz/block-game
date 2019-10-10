@@ -346,19 +346,19 @@ $(document).on('keydown', (e) => {
 	const keycode = e.keyCode;
 
 	// if the right arrow was pressed
-	if (keycode === 39) {
+	if (keycode === 39 || keycode === 68) {
 		game.direction.rightPressed = true;
 	} 
 	// if the left arrow was pressed
-	if (keycode === 37) {
+	if (keycode === 37 || keycode === 65) {
 		game.direction.leftPressed = true;
 	}
 	// if the top arrow was pressed
-	if (keycode === 38) {
+	if (keycode === 38 || keycode === 87) {
 		game.direction.topPressed = true;
 	}
 	// if the bottom arrow was pressed
-	if (keycode === 40) {
+	if (keycode === 40 || keycode === 83) {
 		game.direction.downPressed = true;
 	}
 });
@@ -368,19 +368,19 @@ $(document).on('keyup', (e) => {
 	const keycode = e.keyCode;
 
 	// if the right arrow was pressed
-	if (keycode === 39) {
+	if (keycode === 39 || keycode === 68) {
 		game.direction.rightPressed = false;
 	} 
 	// if the left arrow was pressed
-	if (keycode === 37) {
+	if (keycode === 37 || keycode === 65) {
 		game.direction.leftPressed = false;
 	}
 	// if the top arrow was pressed
-	if (keycode === 38) {
+	if (keycode === 38 || keycode === 87) {
 		game.direction.topPressed = false;
 	}
 	// if the bottom arrow was pressed
-	if (keycode === 40) {
+	if (keycode === 40 || keycode === 83) {
 		game.direction.downPressed = false;
 	}
 });
