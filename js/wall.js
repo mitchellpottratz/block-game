@@ -1,7 +1,7 @@
 
 class Wall {
 	
-	constructor(width, x) {
+	constructor(width, x, speed) {
 		this.width = width;
 		this.height = 30;
 
@@ -13,7 +13,7 @@ class Wall {
 			this.x = x - this.width;	
 		}
 		
-		this.speedY = 1.25;
+		this.speedY = speed;
 		this.y = 0;
 		this.color = this.generateRandomColor();
 		this.hasPassed = false;	
@@ -38,10 +38,4 @@ class Wall {
 		const colors = ['blue', 'green', 'red', 'yellow'];
 		return colors[Math.floor(Math.random() * 4)];
 	}
-
-	static createWalls() {
-		
-	}
-
-
 }

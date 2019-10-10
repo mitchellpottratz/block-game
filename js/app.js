@@ -25,6 +25,8 @@ const game = {
 	delayWalls: false, // used to delay the creation of walls
 	blocks: [], // array to hold block object
 	blocksCollected: 0, // number of blocks the player collected
+	level: 1,
+	wallSpeed: 1.25,
 
 	// animation before the game starts
 	startAnimation() {
@@ -145,8 +147,21 @@ const game = {
 		if (this.walls.leftWall.hasPassed === true) {
 			this.score++;
 			$('#score').html('<span>Score: </span>' + this.score); 
+			this.updateLevel();
 		}	
 	}, 
+
+	// increments the level every 10 times the walls pass and updates the UI
+	updateLevel() {
+		if (this.score % 10 === 0 && this.score !== 0) {
+			const $levelPopup = $('#level-popup');
+			this.level++;
+			this.wallSpeed += 0.1;
+			$('#level-popup-text').text('Level ' + this.level);
+			$levelPopup.fadeIn();
+			$levelPopup.delay(2000).fadeOut();
+		}
+	},
 
 	// detects if the player collides into the walls
 	wallCollision() {
@@ -212,11 +227,11 @@ const game = {
 
 		// create the first wall - give it a random width
 		const leftWallWidth = Math.floor(Math.random() * (canvas.width - 60));
-		const leftWall = new Wall(leftWallWidth, 0);
+		const leftWall = new Wall(leftWallWidth, 0, this.wallSpeed);
 			
 		// create the second wall 
 		const rightWallWidth = (canvas.width - leftWall.width) - 60;
-		const rightWall = new Wall(rightWallWidth, canvas.width);
+		const rightWall = new Wall(rightWallWidth, canvas.width, this.wallSpeed);
 
 		// add both walls to the wall properties
 		this.walls = {leftWall: leftWall, rightWall: rightWall};
