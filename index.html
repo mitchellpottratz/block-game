@@ -18,46 +18,47 @@
 				<p id="blocks-collected"><span>Blocks Collected: </span>0</p>
 				<p id="score"><span>Score: </span>0</p>
 			</div>
-			<canvas id="canvas" height="500" width="350">
+			<canvas id="canvas" width="350px" height="500px">
 			</canvas>
 			<div class="start-menu">
 				<button id="start-btn">Start Game</button> 
-				<button id="help-btn">Help</button>	
+				<button id="how-to-play-btn">How To Play</button>	
 			</div>
 			<div id="count-down"></div>
-			<div class="help-container">
+			
+			<div class="how-to-play-container">
 				<button id="back-link"><span><</span>Back</button>
 				<h3>How To Play</h3>
 				<ul>
+					<li>
+						Avoid the walls by going through the space between them.		
+					</li>
+					<li>
+						Collect the yellow box to get the invinsibility power up. For every
+						15 blocks collected, you receive 5 seconds of invinsibility from the 
+						the walls
+					</li>
+				</ul>
+
+				<h3>Desktop Controls</h3>	
+				<ul>
 					<li>Use the up, down, right and left arrow keys to move the ball.</li>
-					<li>
-						The goal of the game is to fit the ball through the space between
-						the two walls without touching either of them.
-					</li>
-					<li>If you touch either of the walls, you lose the game.</li>
-					<li>
-						If you make it throught the space between the walls without touching either 
-						of them, then you get a point. 
-					</li>
-					<li>The game continues forever until you touch a wall</li>
+				</ul>
+
+				<h3>Mobile Controls</h3>	
+				<ul>
+					<li>Use your finger to move the ball.</li>
 				</ul>
 			</div>
+
 			<div class="game-over-container">
 				<h3>Game Over!</h3>
 				<p id="final-score"><span>Score: </span></p>
 				<p id="final-blocks"><span>Blocks Collected: </span></p>
-
-				<form id="leaderboard-form">
-					<label>Post on the Leaderboard</label>
-					<input type="text" id="name-input" placeholder="Name">
-					<input type="submit" value="Submit" id="leaderboard-btn">	
-				</form>
-
 				<button id="play-again-btn">Play Again</button>
 			</div>
 		</div>
 	</div>
-
 	<script type="text/javascript" src="js/wall.js"></script>
 	<script type="text/javascript" src="js/player.js"></script>
 	<script type="text/javascript" src="js/block.js"></script>

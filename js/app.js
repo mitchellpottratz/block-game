@@ -6,13 +6,22 @@ const ctx = canvas.getContext('2d');
 const game = {
 	score: 0, 
 	timer: 0, // game timer
-	player: player, // holds the player object
-	rightPressed: false, // if the right arrow key is pressed
-	leftPressed: false, // if the left arrow key is pressed
-	upPressed: false, // if the top arrow key is pressed
-	downPressed: false, // if the bottom arrow key is pressed
-	leftWall: null, // holds a wall object
-	rightWall: null, // holds a wall object
+	player: player, // player object
+
+	// direction the player moves
+	direction: {
+		rightPressed: false, 
+		leftPressed: false, 
+		upPressed: false, 
+		downPressed: false
+	},
+
+	// holds the two walls
+	walls: {
+		leftWall: null, 
+		rightWall: null, 
+	},
+
 	delayWalls: false, // used to delay the creation of walls
 	blocks: [], // array to hold block object
 	blocksCollected: 0, // number of blocks the player collected
@@ -22,15 +31,11 @@ const game = {
 		// create a 3 second countdown timer before the game starts
 		let startTimer = 3;
 		const startInterval = setInterval(() => {
-			// update the countdown 
 			$('#count-down').text(startTimer);
-			// decrement timer 
 			startTimer--;
 			// when the timer reaches 0
 			if (startTimer === 0) {
-				// hide the countdown timer
 				$('#count-down').fadeOut(250);
-				// clear the interval
 				clearInterval(startInterval); 
 			}
 		}, 1000);
@@ -50,81 +55,58 @@ const game = {
 
 		// set the game interval - updates every 5 milliseconds
 		const interval = setInterval(() => {
+
 			// clear the canvas every interval
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			// draw the player 
 			this.player.draw(ctx);
 
-			// if the walls passed of the canvas
-			if (this.leftWall.y >= canvas.height) {
-
-				// set the hasPassed property on both walls to true
-				this.leftWall.hasPassed = true;
-				this.rightWall.hasPassed = true;
-
-				// update the score and blocks collected
-				this.updateScoreAndBlocksCollected();
-
-				if (this.delayWalls === false) { 
-					this.createWalls(); // create new walls
-				}
-			}
+			// checks if walls passed off the canvas
+			this.wallsPassed();
 
 			// draw both fo the walls
-			this.leftWall.draw(ctx);
-			this.rightWall.draw(ctx);
+			this.walls.leftWall.draw(ctx);
+			this.walls.rightWall.draw(ctx);
 
 			// move both of the walls
-			this.leftWall.move();
-			this.rightWall.move();
+			this.walls.leftWall.move();
+			this.walls.rightWall.move();
 
-			// create a block if the block array has less than 2 blocks
-			if (this.blocks.length < 2) {
-				const block = this.createBlock();
-				this.blocks.push(block);
-			}
+			// creates the blocks
+			this.createBlocks()
 
 			// draw and move the blocks
 			for (let i=0; i < this.blocks.length; i++) {
 				const block = this.blocks[i];
 				block.draw(ctx);
 				block.move();
-				// if the player collected the block
-				if (this.blockCollision(block)) {
-					block.isCollected();
-				} 
-				// if the block passes off the canvas
-				if (block.y > canvas.height) {
-					block.hasPassed();
-				}
 
-				// if the block is collected or has passed
-				// remove it from the blocks array
-				if (block.collected || block.passed) {
-					this.blocks.splice(i, 1);
-					this.blocksCollected++;
-				}
+				// checks if block was collides (picked up) by the player
+				this.blockCollision(block);
+				// checks if the block passed off the canvas
+				this.blockPassed(block);
+				// checks if block needs to be removed
+				this.removeBlock(block, i);
 			}
 
-			// for every 10 blocks collected, the player is invinsible
-			// for 5 seconds
+			// for every 10 blocks collected, the player is invinsible for 5 seconds
 			this.player.giveInvinsibility(this.blocksCollected);
 
 			// if the right key is pressed 
-			if (this.rightPressed === true) {
+			if (this.direction.rightPressed === true) {
 				player.moveRight();
 			} 
 			// if the left key is pressed
-			if (this.leftPressed === true) {
+			if (this.direction.leftPressed === true) {
 				player.moveLeft();
 			}
 			// if the right key is pressed 
-			if (this.topPressed === true) {
+			if (this.direction.topPressed === true) {
 				player.moveUp();
 			} 
 			// if the left key is pressed
-			if (this.downPressed === true) {
+			if (this.direction.downPressed === true) {
 				player.moveDown();
 			}
 
@@ -157,35 +139,35 @@ const game = {
 	},
 
 	// updates the score and the level
-	updateScoreAndBlocksCollected() {
-		// if the player passed the walls
-		if (this.leftWall.hasPassed === true) {
-			this.score++; // increment the score 
+	updateScore() {
+		// if the player passed the walls then increment the score and update UI
+		if (this.walls.leftWall.hasPassed === true) {
+			this.score++;
 			$('#score').html('<span>Score: </span>' + this.score); // update UI
 		}	
-		// update blocks collected UI
-		$('#blocks-collected').html('<span>Blocks Collected: </span>' + this.blocksCollected);
 	}, 
 
 	// detects if the player collides into the walls
 	wallCollision() {
+		const leftWall = this.walls.leftWall;
+		const rightWall = this.walls.rightWall;
 
 		// if the player does not currently have the invinsibility power
 		if (!this.player.isInvinsible) {	
-			console.log('Invisible: ' + this.player.isInvinsible);
+			
 			// if player collides with the left wall -> return true
-			if (this.player.x - this.player.radius < this.leftWall.x + this.leftWall.width && 
-				this.player.x + this.player.radius > this.leftWall.x &&
-				this.player.y - this.player.radius < this.leftWall.y + this.leftWall.height &&
-				this.player.y + this.player.radius > this.leftWall.y) {
+			if (this.player.x - this.player.radius < leftWall.x + leftWall.width && 
+				this.player.x + this.player.radius > leftWall.x &&
+				this.player.y - this.player.radius < leftWall.y + leftWall.height &&
+				this.player.y + this.player.radius > leftWall.y) {
 				return true; 
 			}
 
 			// if player collides with the right wall -> return true
-			if (this.player.x - this.player.radius < this.rightWall.x + this.rightWall.width &&
-				this.player.x + this.player.radius > this.rightWall.x &&
-				this.player.y - this.player.radius < this.rightWall.y + this.rightWall.height &&
-				this.player.y + this.player.radius > this.rightWall.y) {
+			if (this.player.x - this.player.radius < rightWall.x + rightWall.width &&
+				this.player.x + this.player.radius > rightWall.x &&
+				this.player.y - this.player.radius < rightWall.y + rightWall.height &&
+				this.player.y + this.player.radius > rightWall.y) {
 				return true;
 			}
 		}
@@ -193,17 +175,15 @@ const game = {
 		return false;
 	},
 
-	// this method checks of the walls passed off the
-	// canvas
+	// this method checks of the walls passed off the canvas
 	wallsPassed() {
 		// if the walls are off the screen
-		if (this.leftWall.y > canvas.height) {
-			this.leftWall.hasPassed = true;
+		if (this.walls.leftWall.y > canvas.height) {
+			this.walls.leftWall.hasPassed = true;
 		}
 	},
 
-	// detects if the player collides with the sides
-	// of the canvas area 
+	// detects if the player collides with the sides of the canvas area 
 	canvasCollision() {
 		// if player touches the left wall
 		if (this.player.x - this.player.speedX < this.player.radius) {
@@ -237,29 +217,59 @@ const game = {
 		const rightWall = new Wall(rightWallWidth, canvas.width);
 
 		// add both walls to the wall properties
-		this.leftWall = leftWall;
-		this.rightWall = rightWall;
+		this.walls = {leftWall: leftWall, rightWall: rightWall};
 	}, 
 
+	
+
 	// instantiates a new block object every second
-	createBlock() {
-		// get random x and y position for the block
-		const randomX = Math.floor(Math.random() * ((canvas.width-15) - 15) + 15);
-		const randomY = Math.floor(Math.random() * -10); // between 0 and -10
-		// create block
-		const block = new Block(randomX, randomY);
-		return block;
+	createBlocks() {
+		// while there are less than 2 blocks on the canvas
+		while (this.blocks.length < 2) {
+			console.log('blocks count: ' + this.blocks.length);
+			// get random x and y position for the block
+			const randomX = Math.floor(Math.random() * ((canvas.width-15) - 15) + 15);
+			const randomY = Math.floor(Math.random() * -10); // between 0 and -10
+
+			// create block and add it to blocks array
+			const block = new Block(randomX, randomY);
+			this.blocks.push(block);
+		}
 	},
 
+	// checks if the player collides with one of the blocks
 	blockCollision(block) {
-		// if player collides with the left wall -> return true
 		if (this.player.x - this.player.radius < block.x + block.width && 
 			this.player.x + this.player.radius > block.x &&
 			this.player.y - this.player.radius < block.y + block.height &&
 			this.player.y + this.player.radius > block.y) {
-			return true;
+			block.isCollected();
 		}
-		return false;
+	}, 
+
+	// checks if the block passed off the canvas
+	blockPassed(block) {
+		if (block.y > canvas.height) {
+			block.hasPassed();
+		}
+	},
+
+	// checks if a block was collected or passed off the canvas
+	removeBlock(block, index) {
+
+		// if the player collected the block remove it from the array,
+		// increment blocksCollected score and update UI
+		if (block.collected) {
+			this.blocks.splice(index, 1);
+			this.blocksCollected++;
+			$('#blocks-collected').html('<span>Blocks Collected: </span>' + this.blocksCollected);
+
+		// if the block passed off the canvas, remove it from the array
+		} else if (block.passed) {
+			this.blocks.splice(index, 1);	
+		} else {
+			return;
+		}
 	}, 
 
 	// takes a touch event and returns on object with the
@@ -293,14 +303,6 @@ const game = {
 		this.player.firstTouch.x = null;
 		this.player.firstTouch.y = null;
 	},
-
-	postToLeaderBoard(name) {
-
-	},
-
-	getLeaderBoard() {
-
-	}
 }
 
 
@@ -321,14 +323,14 @@ $('button').on('click', (e) => {
 	}
 
 	// if the help button was clicked
-	if (targetID === 'help-btn') {
+	if (targetID === 'how-to-play-btn') {
 		$('.start-menu').slideUp(500);
-		$('.help-container').delay(500).slideDown(500);
+		$('.how-to-play-container').delay(500).slideDown(500);
 	}
 
 	// if the back link on the help section is clicked
 	if (targetID === 'back-link') {
-		$('.help-container').slideUp(500);
+		$('.how-to-play-container').slideUp(500);
 		$('.start-menu').delay(500).slideDown(500);	
 	}
 
@@ -345,19 +347,19 @@ $(document).on('keydown', (e) => {
 
 	// if the right arrow was pressed
 	if (keycode === 39) {
-		game.rightPressed = true;
+		game.direction.rightPressed = true;
 	} 
 	// if the left arrow was pressed
 	if (keycode === 37) {
-		game.leftPressed = true;
+		game.direction.leftPressed = true;
 	}
 	// if the top arrow was pressed
 	if (keycode === 38) {
-		game.topPressed = true;
+		game.direction.topPressed = true;
 	}
 	// if the bottom arrow was pressed
 	if (keycode === 40) {
-		game.downPressed = true;
+		game.direction.downPressed = true;
 	}
 });
 
@@ -367,42 +369,21 @@ $(document).on('keyup', (e) => {
 
 	// if the right arrow was pressed
 	if (keycode === 39) {
-		game.rightPressed = false;
+		game.direction.rightPressed = false;
 	} 
 	// if the left arrow was pressed
 	if (keycode === 37) {
-		game.leftPressed = false;
+		game.direction.leftPressed = false;
 	}
 	// if the top arrow was pressed
 	if (keycode === 38) {
-		game.topPressed = false;
+		game.direction.topPressed = false;
 	}
 	// if the bottom arrow was pressed
 	if (keycode === 40) {
-		game.downPressed = false;
+		game.direction.downPressed = false;
 	}
 });
-
-// when the leaderboard form is submitted
-$('#leaderboard-form').on('submit', (e) => {
-	e.preventDefault();
-
-	// get the name
-	const $name = $('#name-input').val();
-
-	// if the length of name is greater than 0
-	if ($name.length > 0) {
-
-		// if the name doesnt already exist
-		
-
-	// otherwise, show error message
-	} else {
-
-	}
- 
-});
-
 
 // listens for the finger to first makes contact with the canvas
 $(canvas).on('touchstart', (e) => {
