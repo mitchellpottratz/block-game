@@ -57,6 +57,9 @@ const game = {
  			// clear the canvas every interval
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+			// gamepad game loop
+			gameLoop();
+
 			// draw the player 
 			this.player.draw(ctx);
 
@@ -317,7 +320,8 @@ const game = {
 		// clear the firstTouch property on the player object
 		this.player.firstTouch.x = null;
 		this.player.firstTouch.y = null;
-	},
+	}
+	
 }
 
 
@@ -425,6 +429,10 @@ $(canvas).on('touchend', (e) => {
 	// call the touchend handler
 	game.handleTouchEnd();
 });
+
+
+
+
 
 
 
