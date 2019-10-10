@@ -39,5 +39,9 @@ class Wall {
 		return colors[Math.floor(Math.random() * 4)];
 	}
 
+	static createWalls() {
+		
+	}
+
 
 }

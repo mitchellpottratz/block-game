@@ -222,7 +222,6 @@ const game = {
 		this.walls = {leftWall: leftWall, rightWall: rightWall};
 	}, 
 
-	
 
 	// instantiates a new block object every second
 	createBlocks() {
