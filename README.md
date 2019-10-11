@@ -2,27 +2,17 @@
 
 
 
-# Game - scoring and levels
-- Each time the player goes through a space in the wall, their score goes up by one point.
-- The first level goes up after the player reaches a score of 10. After that, each level goes up by doing this: 10 + (current  level * 5)
-- Game ends after a player touches a wall.
+# User Stories
+- The player controls the ball with the arrow keys, the wasd keys, a Playstation controller or their finger.
+- The goal of the game is to move the ball through the space between the walls, without touching the walls.
+- If the player touches either of the walls, you lose the game.
+- The player is also tasked with collected the yellow blocks.
+- For every 15 yellow blocks the player collects, they receive 5 seconds of invinsiblity, where they can touch
+the walls without losing.
+- Everytime a wall passes by the player without them touching it, the score will go increment by one.
+- Every 10 walls that pass, the level goes up.
+- When the levels increase the speed of the walls slighly go up.
 
-# Player - ball
-- The player is a ball.
-- They will be roughly 5% - 10% of the screen size.
-- Have the ability to move left and right using the right and left arrow key.
-- The vertical position of the player does not change.
-- When the player touches a wall, they lose.
-- If they go in between the space in the wall, then their score goes up by one.
-- The player needs to be able to go fast enough left and right to be able to make it in through the space in the walls.
-
-# Wall - obstacles
-- The obstacles in the game consist of two walls aligned horizontal with a space  roughly twice the size of the player.
-- The walls will move towards the player, but the game will look like the player is moving. 
-- The walls speed will increase when the levels increase.
-- The space in the walls will be calculated by doing:
-- wallOne = Math.floor(Math.random(90)*90);
-- wallTwo = (100 - wallOne) - 10;
 
 ![Wireframe 1](/wireframes/IMG_5486.HEIC?raw=true)
 

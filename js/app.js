@@ -45,8 +45,12 @@ const game = {
 
 	// main game loop
 	start() {
-		// start the game timer
-		this.startGameTimer();
+
+		// game timer
+		const gameInterval = setInterval(() => {
+			this.timer++;
+			console.log(this.timer++);
+		}, 1000);
 
 		// create the initial two walls
 		this.createWalls();
@@ -58,7 +62,7 @@ const game = {
 			ctx.clearRect(0, 0, canvas.width, canvas.height);
 
 			// gamepad game loop
-			gameLoop();
+			// gameLoop();
 
 			// draw the player 
 			this.player.draw(ctx);
@@ -96,7 +100,7 @@ const game = {
 				this.removeBlock(block, i);
 			}
 
-			// for every 10 blocks collected, the player is invinsible for 5 seconds
+			// for every 15 blocks collected, the player is invinsible for 5 seconds
 			this.player.giveInvinsibility(this.blocksCollected);
 
 			// if the right key is pressed 
@@ -123,6 +127,7 @@ const game = {
 			if (this.wallCollision()) {
 				game.stop();
 				clearInterval(interval);
+				clearInterval(gameInterval);
 			}
 			
 		}, 5);
@@ -134,14 +139,6 @@ const game = {
 		$('#final-score').html('<span>Score: </span>' + this.score);
 		$('#final-blocks').html('<span>Blocks Collected: </span>' + this.blocksCollected);
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-	},
-
-	// increments the timer property by one every second
-	startGameTimer() {
-		const interval = setInterval(() => {
-			this.timer++;
-			console.log(this.timer);
-		}, 1000);
 	},
 
 	// updates the score and the level
@@ -274,14 +271,12 @@ const game = {
 
 	// checks if a block was collected or passed off the canvas
 	removeBlock(block, index) {
-
-		// if the player collected the block remove it from the array,
-		// increment blocksCollected score and update UI
+		// if the player collected the block remove it from the array, increment
+		// blocksCollected score and update UI
 		if (block.collected) {
 			this.blocks.splice(index, 1);
 			this.blocksCollected++;
 			$('#blocks-collected').html('<span>Blocks Collected: </span>' + this.blocksCollected);
-
 		// if the block passed off the canvas, remove it from the array
 		} else if (block.passed) {
 			this.blocks.splice(index, 1);	
@@ -290,8 +285,8 @@ const game = {
 		}
 	}, 
 
-	// takes a touch event and returns on object with the
-	// x and y coordinates of the position of the touch on the canvas
+	// takes a touch event and returns on object with thex and y coordinates of
+	// the position of the touch on the canvas
 	getTouchPos(canvasDom, touchEvent) {
 		const rect = canvasDom.getBoundingClientRect();
 	  	return {
@@ -302,22 +297,17 @@ const game = {
 
 	// logic for touchstart listener
 	handleTouchStart(touch) {
-		// set the x and y position to the firstTouch property
-		// on the player object
 		this.player.firstTouch.x = touch.x;
 		this.player.firstTouch.y = touch.y;
 	},
 
 	// logic for the touchmove listener
 	handleTouchMove(touch) {
-		// move the player by passing the touches to the touchMove
-		// method on the player
 		this.player.touchMove(touch);
 	}, 
 
 	// logic for touchend listener
 	handleTouchEnd() {
-		// clear the firstTouch property on the player object
 		this.player.firstTouch.x = null;
 		this.player.firstTouch.y = null;
 	}

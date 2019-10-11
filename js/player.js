@@ -6,7 +6,7 @@ const player = {
 	speedX: 2,
 	speedY: 2,
 	color: '#0095DD',
-	isInvinsible: true,
+	isInvinsible: false,
 	firstTouch: {x: null, y: null},
 
 	// draws the player in the canvas
@@ -46,7 +46,7 @@ const player = {
 		this.y = touch.y - 85; // subtract 85 pixels so the finger doesnt cover the ball
 	},
 
-	// give the player the invinsibility for 5 seconds power up every 10 blocks
+	// give the player the invinsibility for 5 seconds power up every 15 blocks
 	// they collect
 	giveInvinsibility(blocksCollected) {
 		// if they collected 10 blocks
